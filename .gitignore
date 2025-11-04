@@ -1,0 +1,99 @@
+#Name : Sumith Kumar Kurapati
+#Student ID: 00789516
+
+library(readr)
+hospital <- read_csv("C:/Users/Sumith kurapati/Downloads/Hospitalinfo.csv")
+View(hospital)
+
+
+# Install if needed
+install.packages(c("tidyverse", "ggplot2", "dplyr"))
+
+# Load
+library(tidyverse)
+library(ggplot2)
+library(dplyr)
+
+
+
+
+# View basic info
+str(hospital)
+summary(hospital)
+
+# Check for missing values
+colSums(is.na(hospital))
+
+# Check for blanks or â€œNot Availableâ€
+colSums(hospital == "", na.rm = TRUE)
+colSums(hospital == "Not Available", na.rm = TRUE)
+
+# Check for duplicates
+sum(duplicated(hospital))
+
+# Check column names and any typos
+names(hospital)
+
+
+
+# Replace blanks and "Not Available" with NA
+hospital[hospital == " "] <- NA
+hospital[hospital == "Not Available"] <- NA
+
+# Convert text performance ratings to numeric (Below = 1, Same = 2, Above = 3)
+convert_to_numeric <- function(x) {
+  x <- recode(x,
+              "Below the national average" = 1,
+              "Same as the national average" = 2,
+              "Above the national average" = 3)
+  as.numeric(x)
+}
+
+hospital <- hospital %>%
+  mutate(across(contains("national.comparison"), convert_to_numeric))
+
+
+
+
+# Remove rows with missing Hospital overall rating
+hospital_clean <- hospital %>%
+  drop_na(`Hospital overall rating`) %>%
+  mutate(`Hospital overall rating` = as.numeric(`Hospital overall rating`))
+
+# Create histogram
+ggplot(hospital_clean, aes(x = `Hospital overall rating`)) +
+  geom_histogram(binwidth = 1, fill = "orange", color = "black") +
+  labs(
+    title = "Distribution of Hospital Overall Ratings",
+    x = "Hospital Overall Rating (1 = Worst, 5 = Best)",
+    y = "Count"
+  ) +
+  theme_minimal()
+
+
+names(hospital_clean)
+
+ggplot(hospital_clean, aes(x = factor(`mortality national comparison`),
+                           y = `hospital overall rating`)) +
+  geom_boxplot(fill = "lightblue", color = "black") +
+  labs(
+    title = "Hospital Overall Rating vs Mortality National Comparison",
+    x = "Mortality National Comparison (1 = Below, 2 = Same, 3 = Above)",
+    y = "Hospital Overall Rating"
+  ) +
+  theme_minimal()
+
+# Build a multiple linear regression model
+model <- lm(`Hospital overall rating` ~ 
+              `Mortality national comparison` +
+              `Safety of care national comparison` +
+              `Readmission national comparison` +
+              `Patient experience national comparison` +
+              `Effectiveness of care national comparison` +
+              `Timeliness of care national comparison`,
+            data = hospital)
+
+# Show model summary
+summary(model)
+
+
