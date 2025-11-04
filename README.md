@@ -73,7 +73,7 @@ The results can help healthcare organizations focus on the most critical perform
 
 **Sumith Kumar Kurapati**  
 Email: sumithkumar222@gmail.com  
-LinkedIn: linkedin.com/in/ sumithkurapati
+LinkedIn: https://www.linkedin.com/in/sumithkurapati/
 
 
 
