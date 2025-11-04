@@ -3,7 +3,6 @@
 **Exploratory Data Analysis and Predictive Modeling of Hospital Quality Ratings**  
 **Author:** Sumith Kumar Kurapati  
 **University of New Haven**  
-[View Full Project Report (PDF)](docs/SumithKurapati_00789516_BANL6900.pdf)
 
 ---
 
